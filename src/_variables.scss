@@ -1,0 +1,56 @@
+$text-color: #333333;
+
+@mixin header {
+  font-size: 32px;
+  font-weight: 800;
+}
+
+@mixin button($icon: false) {
+  font: inherit;
+  font-weight: 500;
+  padding: 10px;
+  color: whitesmoke;
+  background-color: #585EFF;
+  border-radius: 7px;
+  border: 0;
+  outline: 0;
+  cursor: pointer;
+  box-shadow: 0 0 9px rgba(0, 0, 0, .2);
+  
+  &:hover {
+    background-color: #3239ff;
+  }
+
+  &.disabled,
+  &[disabled] {
+    background-color: #BCBCBC;
+    cursor: not-allowed;
+  }
+
+  @if $icon {
+    display: flex;
+    align-items: center;
+
+    &:before {
+      content: '';
+      width: 25px;
+      height: 25px;
+      background-image: url('/src/assets/icons/#{$icon}');
+      margin-right: 10px;
+    }
+  }
+}
+
+@mixin input {
+  font: inherit;
+  background-color: white;
+  border-radius: 7px;
+  box-shadow: 0 0 9px rgba(0, 0, 0, .2);
+  border: 0;
+  outline: 0;
+  padding: 15px;
+
+  &::placeholder {
+    color: #BCBCBC;
+  }
+}
