@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { computed, reactive, toRef, toRefs, watch } from "vue";
+import { computed, toRef, watch } from "vue";
 import { useLoadMore } from "../composables/useLoadMore";
-import { ProcessedTransactionGroup, Transaction } from "../lib/types";
+import { ProcessedTransactionGroup } from "../lib/types";
 import TransactionItem from "./Transaction.vue";
 
 const props = defineProps<{
   group?: ProcessedTransactionGroup;
 }>();
 
-const { group } = toRefs(props);
+const group = toRef(props, "group");
 const transactions = computed(() => group?.value?.transactions || []);
 
 const { results, canLoadMore, loadMore, resetPagination } = useLoadMore(
@@ -20,14 +20,24 @@ watch(group, () => resetPagination());
 
 <template>
   <section class="transactions-table">
-    <TransactionItem
-      v-for="transaction in results"
-      :key="transaction.id"
-      :transaction="transaction"
-    />
-    <button v-if="canLoadMore" type="button" @click="loadMore">
-      Load more
-    </button>
+    <template v-if="group">
+      <TransitionGroup mode="out-in">
+        <TransactionItem
+          v-for="transaction in results"
+          :key="transaction.id"
+          :transaction="transaction"
+        />
+      </TransitionGroup>
+      <button
+        class="transactions-table__load-more-button"
+        v-if="canLoadMore"
+        type="button"
+        @click="loadMore"
+      >
+        Load more
+      </button>
+    </template>
+    <span v-else>Please select a group</span>
   </section>
 </template>
 
@@ -37,5 +47,11 @@ watch(group, () => resetPagination());
   display: flex;
   flex-direction: column;
   gap: 5px;
+
+  .transactions-table__load-more-button {
+    @include button("pending_white.svg");
+    justify-content: center;
+    margin-top: 25px;
+  }
 }
 </style>

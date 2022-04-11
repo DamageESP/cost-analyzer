@@ -36,6 +36,7 @@ const transactions = ref<Transaction[]>([]);
 
   .exitButton {
     position: absolute;
+    z-index: 1;
     right: 100px;
     top: 100px;
     width: 50px;
@@ -44,8 +45,26 @@ const transactions = ref<Transaction[]>([]);
     border: none;
     outline: none;
     cursor: pointer;
-    background-image: url("./assets/icons/close_black.png");
+    background-image: url("./assets/icons/close_black.svg");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
     display: block;
+  }
+
+  .v-move,
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 0.5s ease;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
+  }
+  .v-leave-active {
+    position: absolute;
+    display: none;
   }
 }
 </style>

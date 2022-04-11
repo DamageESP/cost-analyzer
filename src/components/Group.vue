@@ -23,11 +23,17 @@ defineEmits<{
       )})`,
     }"
     class="group"
-    :class="{ selected }"
+    :class="{ selected: selected }"
     @click="$emit('select-group', group)"
   >
     <div class="group__actions">
-      <button type="button" @click="$emit('delete-group', group)">x</button>
+      <button
+        type="button"
+        @click="$emit('delete-group', group)"
+        class="group__actions-delete"
+      >
+        <img src="../assets/icons/delete_black.svg" alt="Delete group" />
+      </button>
     </div>
     <strong class="group-name">{{ group.groupName }}</strong>
     <!-- <span>{{ displayAmount(group.total || 0) }}</span>
@@ -51,16 +57,46 @@ defineEmits<{
   border-radius: 7px;
   gap: 7px;
   padding: 10px;
+  transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   &:not(.selected) {
     .group__actions {
-      display: none;
+      opacity: 0;
     }
   }
 
   &.selected {
-    border: 2px solid #333;
+    /* border: 2px solid rgba(0, 0, 0, 0.2); */
+    transform: translateX(45px);
+    box-shadow: -5px 0px 45px rgba(0, 0, 0, 0.2);
   }
 
+  .group__actions {
+    position: absolute;
+    left: -45px;
+    transition: all 0.5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    opacity: 1;
+
+    &-delete {
+      border: 0;
+      outline: none;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
+      cursor: pointer;
+
+      &:hover {
+        background: rgba(0, 0, 0, 0.1);
+      }
+      img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
   .group-name {
     font-size: 18px;
     font-weight: 500;

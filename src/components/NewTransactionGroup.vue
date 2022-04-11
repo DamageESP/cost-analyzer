@@ -71,7 +71,7 @@ onMounted(() => (groupNameRef.value as HTMLInputElement).focus());
           <span class="name">{{ keyword }}</span>
           <img
             class="icon"
-            src="../assets/icons/delete_black.png"
+            src="../assets/icons/delete_black.svg"
             alt="Delete keyword"
           />
         </button>
@@ -96,6 +96,7 @@ onMounted(() => (groupNameRef.value as HTMLInputElement).focus());
 
 .new-transaction-group {
   position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
@@ -151,7 +152,7 @@ onMounted(() => (groupNameRef.value as HTMLInputElement).focus());
     }
 
     .new-transaction-group_add-button {
-      @include button("add_white.png");
+      @include button("add_white.svg");
       padding-right: 50px;
       align-self: flex-end;
     }

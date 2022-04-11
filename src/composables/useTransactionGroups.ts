@@ -35,7 +35,7 @@ export const useTransactionGroups = (transactions: Ref<Transaction[]>) => {
         },
         []
       )
-      .map<ProcessedTransactionGroup>((g, i, arr) => ({ ...g, ...getGroupEconomicBreakdown(g), percentage: getGroupPercentage(g, arr), transactions: g.transactions.sort((t1, t2) => t1.amount < t2.amount ? -1 : 1) }))
+      .map<ProcessedTransactionGroup>((g, i, arr) => ({ ...g, ...getGroupEconomicBreakdown(g), percentage: getGroupPercentage(g, arr) }))
       .sort((g1, g2) =>
         Math.abs(g1.total) < Math.abs(g2.total) ? 1 : -1
       )

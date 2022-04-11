@@ -62,11 +62,12 @@ const createGroupCallback = (group: TransactionGroup) => {
 @import "../variables";
 .cost-analyzer {
   display: grid;
-  grid-template-columns: 0.3fr 1fr;
+  grid-template-columns: 300px 1fr;
   gap: 30px 75px;
+  padding: 15px;
 
   .cost-analyzer_add-button {
-    @include button("add_white.png");
+    @include button("add_white.svg");
     justify-self: flex-end;
   }
 

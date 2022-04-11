@@ -16,19 +16,21 @@ defineProps<{
 
 <template>
   <nav class="group-sidebar">
-    <Group
-      v-for="group in groups"
-      :key="group.groupName"
-      :group="group"
-      :selected="selectedGroup?.groupName === group.groupName"
-      @select-group="$emit('select-group', $event)"
-      @delete-group="$emit('delete-group', $event)"
-    />
-    <Group
-      key="other"
-      :group="unclassifiedTransactions"
-      @select-group="$emit('select-group', $event)"
-    />
+    <transition-group>
+      <Group
+        v-for="group in groups"
+        :key="group.groupName"
+        :group="group"
+        :selected="selectedGroup?.groupName === group.groupName"
+        @select-group="$emit('select-group', $event)"
+        @delete-group="$emit('delete-group', $event)"
+      />
+      <Group
+        key="other"
+        :group="unclassifiedTransactions"
+        @select-group="$emit('select-group', $event)"
+      />
+    </transition-group>
   </nav>
 </template>
 
@@ -37,6 +39,6 @@ defineProps<{
 .group-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 </style>
