@@ -64,7 +64,9 @@ const upload = async () => {
 
 const loadSample = async (e: Event) => {
   e.stopPropagation();
-  const sampleFile = await fetch("/sample.xlsx").then((f) => f.blob());
+  const sampleFile = await fetch(
+    `${import.meta.env.BASE_URL}/sample.xlsx`
+  ).then((f) => f.blob());
   const data = await readXlsxFile(sampleFile as File);
   launchApp(data);
 };
@@ -103,10 +105,7 @@ const loadSample = async (e: Event) => {
           <br />
           <p>
             ...or load a
-            <a
-              @click="$event.stopPropagation()"
-              download
-              href="/public/sample.xlsx"
+            <a @click="$event.stopPropagation()" download href="/sample.xlsx"
               >sample file</a
             >.
           </p>
