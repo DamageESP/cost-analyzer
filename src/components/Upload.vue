@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import readXlsxFile from "read-excel-file";
+import readXlsxFile, { Row } from "read-excel-file";
 import { Transaction } from "../lib/types";
 
 const emit = defineEmits<{
@@ -27,32 +27,46 @@ const highlight = () => (draggingOver.value = true);
 const unhighlight = () => (draggingOver.value = false);
 const openFilePicker = () => fileInput.value?.click();
 
-const upload = async () => {
-  if (!files.value?.length || files.value?.item(0) === null) return;
-  const data = await readXlsxFile(files.value.item(0)!);
+const parseExcelData = (data: Row[]) =>
+  data
+    .filter(
+      (row) =>
+        row.filter((col) => col).length >= 3 &&
+        (row[0] instanceof Date ||
+          (new Date(row[0] as string) instanceof Date &&
+            !isNaN(new Date(row[0] as string).getTime()))) &&
+        typeof row[2] === "string" &&
+        typeof row[3] === "number"
+    )
+    .map((row, i) => ({
+      id: i.toString(),
+      concept: row[2] as string,
+      date: new Date(row[0] as string),
+      amount: row[3] as number,
+    }));
+
+const launchApp = (data: Row[]) => {
   try {
-    const transactions: Transaction[] = data
-      .filter(
-        (row) =>
-          row.filter((col) => col).length >= 3 &&
-          (row[0] instanceof Date ||
-            (new Date(row[0] as string) instanceof Date &&
-              !isNaN(new Date(row[0] as string).getTime()))) &&
-          typeof row[2] === "string" &&
-          typeof row[3] === "number"
-      )
-      .map((row, i) => ({
-        id: i.toString(),
-        concept: row[2] as string,
-        date: new Date(row[0] as string),
-        amount: row[3] as number,
-      }));
+    const transactions: Transaction[] = parseExcelData(data);
     if (transactions.length) emit("got-transactions", transactions);
     else throw new Error("Could not find transactions in the given file");
   } catch (err) {
     console.error("Could not parse uploaded file.", err);
     files.value = undefined;
   }
+};
+
+const upload = async () => {
+  if (!files.value?.length || files.value?.item(0) === null) return;
+  const data = await readXlsxFile(files.value.item(0)!);
+  launchApp(data);
+};
+
+const loadSample = async (e: Event) => {
+  e.stopPropagation();
+  const sampleFile = await fetch("/sample.xlsx").then((f) => f.blob());
+  const data = await readXlsxFile(sampleFile as File);
+  launchApp(data);
 };
 </script>
 
@@ -81,11 +95,28 @@ const upload = async () => {
         <div>
           <p>The expected format is 5 columns:</p>
           <ol>
-            <li>Date of movement</li>
+            <li>Date of movement (date format)</li>
             <li>(empty)</li>
-            <li>Movement concept</li>
-            <li>Amount</li>
+            <li>Movement concept (string)</li>
+            <li>Amount (number)</li>
           </ol>
+          <br />
+          <p>
+            ...or load a
+            <a
+              @click="$event.stopPropagation()"
+              download
+              href="/public/sample.xlsx"
+              >sample file</a
+            >.
+          </p>
+          <button
+            type="button"
+            class="upload__box-load-sample-button"
+            @click="loadSample($event)"
+          >
+            Use sample file
+          </button>
         </div>
         <input
           type="file"
@@ -142,6 +173,10 @@ const upload = async () => {
         font-size: 18px;
         font-weight: 500;
       }
+    }
+    .upload__box-load-sample-button {
+      @include button("load_sample_white.svg");
+      margin-top: 25px;
     }
   }
 }

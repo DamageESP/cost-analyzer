@@ -32,7 +32,7 @@ const transactions = ref<Transaction[]>([]);
   color: $text-color;
   max-width: 1200px;
   margin: 0 auto;
-  padding-top: 75px;
+  padding: 75px 0;
 
   .exitButton {
     position: absolute;

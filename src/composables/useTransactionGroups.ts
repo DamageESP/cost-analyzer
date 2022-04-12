@@ -12,7 +12,7 @@ export const useTransactionGroups = (transactions: Ref<Transaction[]>) => {
       : []
   );
 
-  const unclassifiedTransactions: ComputedRef<ProcessedTransactionGroup> = computed(() => ({ ...otherGroup, ...getGroupEconomicBreakdown(otherGroup), percentage: '0' }))
+  const unclassifiedTransactions: ComputedRef<ProcessedTransactionGroup> = computed(() => ({ ...otherGroup, ...getGroupEconomicBreakdown(otherGroup), percentage: transactionGroups.value.length ? getGroupPercentage(otherGroup, transactionGroups.value) : '0' }))
 
   const transactionGroups: ComputedRef<ProcessedTransactionGroup[]> = computed(() =>
     transactions.value

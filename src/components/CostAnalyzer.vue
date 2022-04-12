@@ -32,9 +32,9 @@ const createGroupCallback = (group: TransactionGroup) => {
       class="cost-analyzer_add-button"
       @click="creatingGroup = true"
     >
-      Add group
+      Create new group
     </button>
-    <h1 class="cost-analyzer__header">Movements</h1>
+    <h1 class="cost-analyzer__header">Transactions</h1>
     <GroupSidebar
       :groups="transactionGroups"
       :unclassifiedTransactions="unclassifiedTransactions"

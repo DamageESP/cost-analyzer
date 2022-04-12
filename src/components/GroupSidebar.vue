@@ -28,6 +28,7 @@ defineProps<{
       <Group
         key="other"
         :group="unclassifiedTransactions"
+        :selected="selectedGroup?.groupName === 'Unclassified'"
         @select-group="$emit('select-group', $event)"
       />
     </transition-group>
